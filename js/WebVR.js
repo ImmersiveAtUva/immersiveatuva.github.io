@@ -189,7 +189,10 @@ var WEBVR = {
 					} else {
 
 						showVRNotFound();
-
+						controls_active = true;
+						controls = new THREE.PointerLockControls(camera);
+						scene.add(controls.getObject());
+						console.log("YETEEEEEEEEEEEEEET");
 					}
 
 				} ).catch( showVRNotFound );
