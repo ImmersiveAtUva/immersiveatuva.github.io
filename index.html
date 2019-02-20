@@ -184,6 +184,7 @@ navigator.getVRDisplays().then(function (vrDisplays) {
   // displays, so provide controls for a monoscopic desktop view
   else {
     controls = new THREE.OrbitControls(camera);
+    controls.keyPanSpeed = 80;
     controls.target.set(0, 0, -1);
 
     // Disable the "Enter VR" button
