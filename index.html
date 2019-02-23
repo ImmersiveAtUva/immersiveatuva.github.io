@@ -19,12 +19,15 @@
 
 <html lang="en">
 <head>
-<title>WebVR Polyfill Demo</title>
+<title>Immersive@UVA</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<!-- favicon -->
+<link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16" />
 <style>
 html, body {
   width: 100%;
@@ -80,6 +83,8 @@ document.addEventListener('touchmove', function(e) {
 
 <script src="js/webvr-polyfill.js"></script>
 
+<!-- My text code -->
+<script src="js/ui.js"></script>
 
 <script>
 // Get config from URL
@@ -138,19 +143,9 @@ var vrDisplay, controls;
 
 // Add a repeating grid as a skybox.
 var boxWidth = 5;
+// Load the skybox texture
+init_font_loader();
 
-// Create 3D objects.
-var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-var material = new THREE.MeshNormalMaterial();
-var cube = new THREE.Mesh(geometry, material);
-
-// Position cube
-cube.position.z = -1;
-
-// Add cube mesh to your three.js scene
-scene.add(cube);
-
-// Load the skybox texture and cube
 var loader = new THREE.TextureLoader();
 loader.load('img/box.jpg', onTextureLoaded);
 function onTextureLoaded(texture) {
@@ -202,8 +197,7 @@ function animate(timestamp) {
   var delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
 
-  // Apply rotation to cube mesh
-  cube.rotation.y += delta * 0.0002;
+  
 
   // Update VR headset position and apply to camera.
   controls.update();
