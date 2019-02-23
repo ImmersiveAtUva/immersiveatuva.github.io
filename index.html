@@ -19,12 +19,15 @@
 
 <html lang="en">
 <head>
-<title>WebVR Polyfill Demo</title>
+<title>Immersive@UVA</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<!-- favicon -->
+<link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16" />
 <style>
 html, body {
   width: 100%;
@@ -67,19 +70,21 @@ document.addEventListener('touchmove', function(e) {
 </script>
 
 <!-- three.js library -->
-<script src="third_party/three.js/three.js"></script>
+<script src="js/three.min.js"></script>
 
 <!-- VRControls.js applies the WebVR transformations to a three.js camera object. -->
-<script src="third_party/three.js/VRControls.js"></script>
+<script src="js/VRControls.js"></script>
 
 <!-- OrbitControls.js for controlling camera on desktop.  -->
-<script src="third_party/three.js/OrbitControls.js"></script>
+<script src="js/OrbitControls.js"></script>
 
 <!-- VREffect.js handles stereo camera setup and rendering.  -->
-<script src="third_party/three.js/VREffect.js"></script>
+<script src="js/VREffect.js"></script>
 
-<script src="../build/webvr-polyfill.js"></script>
+<script src="js/webvr-polyfill.js"></script>
 
+<!-- My text code -->
+<script src="js/ui.js"></script>
 
 <script>
 // Get config from URL
@@ -138,21 +143,11 @@ var vrDisplay, controls;
 
 // Add a repeating grid as a skybox.
 var boxWidth = 5;
+// Load the skybox texture
+init_font_loader();
 
-// Create 3D objects.
-var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-var material = new THREE.MeshNormalMaterial();
-var cube = new THREE.Mesh(geometry, material);
-
-// Position cube
-cube.position.z = -1;
-
-// Add cube mesh to your three.js scene
-scene.add(cube);
-
-// Load the skybox texture and cube
 var loader = new THREE.TextureLoader();
-loader.load('img/box.png', onTextureLoaded);
+loader.load('img/box.jpg', onTextureLoaded);
 function onTextureLoaded(texture) {
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
@@ -160,7 +155,6 @@ function onTextureLoaded(texture) {
   var geometry = new THREE.BoxGeometry(boxWidth, boxWidth, boxWidth);
   var material = new THREE.MeshBasicMaterial({
     map: texture,
-    color: 0x01BE00,
     side: THREE.BackSide
   });
   var skybox = new THREE.Mesh(geometry, material);
@@ -185,6 +179,7 @@ navigator.getVRDisplays().then(function (vrDisplays) {
   // displays, so provide controls for a monoscopic desktop view
   else {
     controls = new THREE.OrbitControls(camera);
+    controls.keyPanSpeed = 80;
     controls.target.set(0, 0, -1);
 
     // Disable the "Enter VR" button
@@ -202,8 +197,7 @@ function animate(timestamp) {
   var delta = Math.min(timestamp - lastRender, 500);
   lastRender = timestamp;
 
-  // Apply rotation to cube mesh
-  cube.rotation.y += delta * 0.0002;
+  
 
   // Update VR headset position and apply to camera.
   controls.update();
