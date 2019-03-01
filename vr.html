@@ -128,9 +128,11 @@ loader.load('img/box.jpg', function (texture) {
   scene.add(floor);
 });
 load_image("img/vr.png", new THREE.Vector3(0,0,-2));
+load_image("img/projects.png", new THREE.Vector3(0,0,2));
+load_image("img/contact.png", new THREE.Vector3(2,0,0));
+load_image("img/meeting_times.png", new THREE.Vector3(-2,0,0));
 function load_image(path, pos,scalefactor=500){
   loader.load(path, function(texture){
-    console.log(texture);
     texture1 = texture;
     var h = texture.image.height;
     var w = texture.image.width;
@@ -141,7 +143,7 @@ function load_image(path, pos,scalefactor=500){
 
     // set the position of the image mesh in the x,y,z dimensions
     mesh.position.add(pos);
-    mesh.lookAt(camera.position);
+    mesh.lookAt(0,0,0);
     scene.add(mesh);
   });
 }
