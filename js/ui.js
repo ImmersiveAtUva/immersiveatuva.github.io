@@ -10,6 +10,7 @@ function init_font_loader(){
 		//font is loaded
 		uifont = font;
 		create_HUD("immersive");
+		create_title();
 		return uifont;
 	});
 	
@@ -18,25 +19,36 @@ function init_font_loader(){
  * @param uicolor the color of the material
  * @returns a mesh with a certain color and a text geometry
  */
-function create_text_mesh(text, textsize = 0.05, uicolor = "#000000"){
-	var text_geometry = create_text_geometry(text, textsize);
+function create_text_mesh(text, textsize = 0.05, uicolor = "#000000", h= 0.01){
+	var text_geometry = create_text_geometry(text, textsize,h);
 	var text_material = new THREE.MeshBasicMaterial({color: uicolor});
 	var text_mesh = new THREE.Mesh( text_geometry, text_material);
-	
+	text_mesh.receiveShadow = true;
+	text_mesh.castShadow = true;
 	return text_mesh;
 }
 /**
  * @returns text geometry with given size
  */
-function create_text_geometry(text, textsize){
+function create_text_geometry(text, textsize, h){
 	var text_geom = new THREE.TextGeometry( text, {
 		font: uifont,	//the already loaded font
 		size: textsize,
-		height: 0.01,
+		height: h,
 		curveSegments: 2,
-		bevelEnabled: false,
+		bevelEnabled: false
 	} );
 	return text_geom;
+}
+/**
+ * Makes title
+ */
+function create_title(){
+	var text_mesh = create_text_mesh("immersive@uva", 1, "#ff0000", .1);
+	text_mesh.lookAt(0,0,0);
+	console.log(text_mesh.geometry);
+	text_mesh.position.set(-3.5,1.6,-2.2)
+	scene.add(text_mesh);
 }
 /**
  * Makes text at a good distance for HUDs
