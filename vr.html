@@ -97,8 +97,9 @@ var reticle = new THREE.Mesh(
 );
 reticle.position.z = -0.5;
 camera.add(reticle);
+camera.position.set(0,0,1);
 scene.add(camera);
-
+var texture1;
 // Apply VR stereo rendering to renderer.
 var effect = new THREE.VREffect(renderer);
 effect.setSize(canvas.clientWidth, canvas.clientHeight, false);
@@ -111,8 +112,7 @@ var boxWidth = 5;
 init_font_loader();
 
 var loader = new THREE.TextureLoader();
-loader.load('img/box.jpg', onTextureLoaded);
-function onTextureLoaded(texture) {
+loader.load('img/box.jpg', function (texture) {
   var geometry = new THREE.BoxGeometry(boxWidth, 0.1, boxWidth);
   var material = new THREE.MeshBasicMaterial({
     map: texture,
@@ -121,8 +121,25 @@ function onTextureLoaded(texture) {
   var floor = new THREE.Mesh(geometry, material);
   floor.position.set(0,-1,0);
   scene.add(floor);
-}
+});
+load_image("img/contact.png", new THREE.Vector3(0,0,-2));
+function load_image(path, pos,scalefactor=500){
+  loader.load(path, function(texture){
+    console.log(texture);
+    texture1 = texture;
+    var h = texture.image.height;
+    var w = texture.image.width;
 
+    var geometry = new THREE.PlaneGeometry(w/scalefactor, h/scalefactor);
+    var material = new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide});
+    var mesh = new THREE.Mesh(geometry, material);
+
+    // set the position of the image mesh in the x,y,z dimensions
+    mesh.position.add(pos);
+    mesh.lookAt(camera.position);
+    scene.add(mesh);
+  });
+}
 // The polyfill provides this in the event this browser
 // does not support WebVR 1.1
 navigator.getVRDisplays().then(function (vrDisplays) {
@@ -142,7 +159,7 @@ navigator.getVRDisplays().then(function (vrDisplays) {
   else {
     controls = new THREE.OrbitControls(camera);
     controls.keyPanSpeed = 80;
-    controls.target.set(0, 0, -1);
+    controls.target.set(0, 0, 0);
 
     // Disable the "Enter VR" button
     var enterVRButton = document.querySelector('#vr');
