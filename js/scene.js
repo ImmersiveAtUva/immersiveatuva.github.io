@@ -62,12 +62,11 @@ function check_vr_click(){
   // console.log(firstobj);
   if(firstobj !== undefined){
     if(selected_obj === undefined){
-      
+
       setTimeout(function(){ request_redirect(firstobj); }, 3000);
       selected_obj = firstobj;
     }
     if(firstobj.object.name !== selected_obj.object.name){
-      
       console.log("New obj selected");
       setTimeout(function(){ request_redirect(firstobj); }, 3000);
       selected_obj = firstobj;
@@ -77,6 +76,7 @@ function check_vr_click(){
   else{
     selected_obj = firstobj;
     camera.userData.reticle.material.color.setHex( 0x000000 ); 
+
   }
 }
 function request_redirect(img_obj){
