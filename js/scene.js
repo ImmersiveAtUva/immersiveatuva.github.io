@@ -35,6 +35,7 @@ init();
 function init(){
   init_scene();
   init_camera();
+  init_font_loader();
   init_images();
 }
 
@@ -49,14 +50,54 @@ function init_scene() {
   scene.add( directionalLight );
 }
 
+function getIntersections() {
+  cam_mat.identity().extractRotation(camera.matrixWorld );
+  raycaster.ray.origin.setFromMatrixPosition(camera.matrixWorld);
+  raycaster.ray.direction.set( 0, 0, -1 ).applyMatrix4( cam_mat );
+  return raycaster.intersectObjects( img_obj_list );
+}
 
+function check_vr_click(){
+  firstobj = getIntersections()[0];
+  // console.log(firstobj);
+  if(firstobj !== undefined){
+    if(selected_obj === undefined){
+      // request_redirect(firstobj);
+      setTimeout(function(){ request_redirect(firstobj); }, 3000);
+      selected_obj = firstobj;
+    }
+    if(firstobj.object.name !== selected_obj.object.name){
+      // request_redirect(firstobj);
+      console.log("New obj selected");
+      setTimeout(function(){ request_redirect(firstobj); }, 3000);
+      selected_obj = firstobj;
+    }
+  }else{
+    selected_obj = firstobj;
+  }
+}
+function request_redirect(img_obj){
+  if(img_obj!==undefined){
+    console.log(img_obj.object.name);
+    console.log(selected_obj.object.name);
+    if(img_obj.object.name === selected_obj.object.name){
+      if(img_obj.object.userData.redirect){
+        window.location.href = img_obj.object.userData.url;
+      }
+      else{
+        console.log("I would have redirected but the img doesn't tell me to.");
+      }
+      
+    }
+  }
+}
 // Create a three.js camera.
 function init_camera() {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
   // Create a reticle
   var reticle = new THREE.Mesh(
     new THREE.RingBufferGeometry(0.005, 0.01, 15),
-    new THREE.MeshBasicMaterial({ color: 0xffffff })
+    new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.5 })
   );
   reticle.position.z = -0.5;
   camera.add(reticle);
@@ -75,41 +116,8 @@ var vrDisplay, controls;
 // Add a repeating grid as a skybox.
 var boxWidth = 5;
 // Load the skybox texture
-init_font_loader();
-function init_images(){
-  loader = new THREE.TextureLoader();
-  loader.load('img/box.jpg', function (texture) {
-    var geometry = new THREE.BoxGeometry(boxWidth, 0.1, boxWidth);
-    var material = new THREE.MeshBasicMaterial({
-      map: texture,
-      side: THREE.BackSide
-    });
-    var floor = new THREE.Mesh(geometry, material);
-    floor.position.set(0,-1,0);
-    scene.add(floor);
-  });
-  load_image("img/vr.png", new THREE.Vector3(0,0,-2));
-  load_image("img/projects.png", new THREE.Vector3(0,0,2));
-  load_image("img/contact.png", new THREE.Vector3(2,0,0));
-  load_image("img/meeting_times.png", new THREE.Vector3(-2,0,0));
-}
 
-function load_image(path, pos,scalefactor=500){
-  loader.load(path, function(texture){
-    texture1 = texture;
-    var h = texture.image.height;
-    var w = texture.image.width;
 
-    var geometry = new THREE.PlaneGeometry(w/scalefactor, h/scalefactor);
-    var material = new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide});
-    var mesh = new THREE.Mesh(geometry, material);
-
-    // set the position of the image mesh in the x,y,z dimensions
-    mesh.position.add(pos);
-    mesh.lookAt(0,0,0);
-    scene.add(mesh);
-  });
-}
 // The polyfill provides this in the event this browser
 // does not support WebVR 1.1
 navigator.getVRDisplays().then(function (vrDisplays) {
@@ -150,7 +158,8 @@ function animate(timestamp) {
 
   // Update VR headset position and apply to camera.
   controls.update();
-
+  
+  check_vr_click();
   // Render the scene.
   effect.render(scene, camera);
 

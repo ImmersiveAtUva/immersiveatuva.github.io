@@ -50,7 +50,13 @@ document.addEventListener('touchmove', function(e) {
 <script src="js/ui.js"></script>
 <script>
   var camera, scene, canvas, render, polyfill, loader;
+  var img_obj_list = [];
+  var raycaster = new THREE.Raycaster();
+  var cam_mat = new THREE.Matrix4();
+  var already_clicked = false;
+  var selected_obj;
 </script>
+<script src="js/images.js"></script>
 <script src="js/scene.js"></script>
 
 </html>
