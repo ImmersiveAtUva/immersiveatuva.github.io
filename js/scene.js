@@ -59,19 +59,15 @@ function getIntersections() {
 
 function check_vr_click(){
   firstobj = getIntersections()[0];
-  // console.log(firstobj);
   if(firstobj !== undefined){
     if(selected_obj === undefined){
-
-      setTimeout(function(){ request_redirect(firstobj); }, 3000);
+      clearTimeout(req);
+      req = setTimeout(function(){ request_redirect(firstobj); }, 3000);
       selected_obj = firstobj;
     }
-    if(firstobj.object.name !== selected_obj.object.name){
-      console.log("New obj selected");
-      setTimeout(function(){ request_redirect(firstobj); }, 3000);
-      selected_obj = firstobj;
-    }
+    if(firstobj.object.userData.redirect){
     camera.userData.reticle.material.color.setHex( 0xff1100 ); 
+    }
   }
   else{
     selected_obj = firstobj;
@@ -86,10 +82,9 @@ function request_redirect(img_obj){
     if(img_obj.object.name === selected_obj.object.name){
       if(img_obj.object.userData.redirect){
         window.location.href = img_obj.object.userData.url;
+        // console.log("going to: + " + img_obj.object.userData.url)
       }
-      else{
-        console.log("I would have redirected but the img doesn't tell me to.");
-      }
+      
       
     }
   }
