@@ -1,6 +1,3 @@
 # immersive-site
-## WIP
-### for Immersive@UVA. should have both html and vr info.
-## TODO
- - Add logo and information panels - these will have to be webpages saved as images or risk creating too much text
- 
+### for Immersive@UVA
+This website now features working links in virtual reality! Simply hover over a button for 3 seconds to be redirected. 
