@@ -44,11 +44,15 @@ function create_text_geometry(text, textsize, h){
  * Makes title
  */
 function create_title(){
-	var text_mesh = create_text_mesh("immersive@uva", 1, "#ff0000", .1);
-	text_mesh.lookAt(0,0,0);
-	console.log(text_mesh.geometry);
-	text_mesh.position.set(-3.5,1.6,-2.2)
-	scene.add(text_mesh);
+	var title_mesh = create_text_mesh("immersive@uva", 1, "#ff0000", .1);
+	title_mesh.lookAt(0,0,0);
+	title_mesh.position.set(-3.5,1.6,-2.2);
+	scene.add(title_mesh);
+
+	var subtitle = create_text_mesh("hover over buttons to follow them", 0.25, "#ff0000", .01);
+	subtitle.lookAt(0,0,0);
+	subtitle.position.set(-2,1,-2.2);
+	scene.add(subtitle);
 }
 /**
  * Makes text at a good distance for HUDs
