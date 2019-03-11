@@ -10,15 +10,19 @@ function init_images(){
     floor.position.set(0,-1,0);
     scene.add(floor);
   });
-  load_image("img/vr.png", new THREE.Vector3(0,0,-2));
-  load_image("img/projects.png", new THREE.Vector3(0,0,2), true, "https://github.com/ImmersiveAtUva/immersive-dev-project");
-  load_image("img/contact.png", new THREE.Vector3(2,0,0), true, "mailto:immersive@virginia.edu");
+  load_image("img/vr.png", new THREE.Vector3(0,0,-2),false, "", 500);
+  load_image("img/projects.png", new THREE.Vector3(0,0.5,2));
+  load_image("img/github.png", new THREE.Vector3(0,0.1,2), true, "https://github.com/ImmersiveAtUva/immersive-dev-project");
   load_image("img/meeting_times.png", new THREE.Vector3(-2,0,0));
+  load_image("img/contact.png", new THREE.Vector3(2,0.5,0));
+  load_image("img/email.png", new THREE.Vector3(2,0.1,0), true, "mailto:immersive@virginia.edu");
+  load_image("img/fb.png", new THREE.Vector3(2,-0.25,0), true, "https://www.facebook.com/ImmersiveUVA");
+
 
 }
 
-function load_image(path, pos,redirect=false,url=""){
-  var scalefactor=500;
+function load_image(path, pos,redirect=false,url="",scalefactor=300){
+  
   loader.load(path, function(texture){
     texture1 = texture;
     var h = texture.image.height;
