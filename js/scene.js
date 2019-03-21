@@ -56,7 +56,8 @@ function getIntersections() {
   raycaster.ray.direction.set( 0, 0, -1 ).applyMatrix4( cam_mat );
   return raycaster.intersectObjects( img_obj_list );
 }
-
+var color = 0xff1100;
+var color_count = 0.0;
 function check_vr_click(){
   firstobj = getIntersections()[0];
   if(firstobj !== undefined){
@@ -66,12 +67,19 @@ function check_vr_click(){
       selected_obj = firstobj;
     }
     if(firstobj.object.userData.redirect){
-    camera.userData.reticle.material.color.setHex( 0xff1100 ); 
+    color_count+=0.005;
+    camera.userData.reticle.material.color.setRGB(color_count, 0, 0);
+    firstobj.object.material.color.b += (color_count);
+
     }
   }
   else{
+    color_count = 0;
+    camera.userData.reticle.material.color.setHex( 0x000000 );
+    if(selected_obj!==undefined){
+      selected_obj.object.material.color.setRGB(1,1,1);
+    }
     selected_obj = firstobj;
-    camera.userData.reticle.material.color.setHex( 0x000000 ); 
 
   }
 }
